@@ -1,0 +1,24 @@
+---
+- name: Disable SELinux
+  command: "setenforce 0"
+
+- name: Disable SELinux Config
+  lineinfile:
+    path: /etc/selinux/config
+    regexp: '^SELINUX='
+    line: 'SELINUX=disabled'
+
+- name: Copy Kubeadm Config
+  copy:
+    src: 09-kubeadm.conf
+    dest: /etc/systemd/system/kubelet.service.d/09-kubeadm.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Restart kubelet and daemon reload
+  systemd:
+    daemon_reload: True
+    name: kubelet
+    state: restarted
+    enabled: True

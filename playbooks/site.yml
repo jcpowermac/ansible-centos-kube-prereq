@@ -1,0 +1,10 @@
+---
+- name: Configure Prereqs for Kubernetes kubeadm
+  gather_facts: False
+  hosts: all
+  roles:
+    - packages
+    - partition
+    - docker
+    - kubeadm
+    - networking

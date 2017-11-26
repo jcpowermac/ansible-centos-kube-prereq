@@ -1,0 +1,4 @@
+---
+dev: /dev/vda
+part: 1
+max_gap_kb: 1024
