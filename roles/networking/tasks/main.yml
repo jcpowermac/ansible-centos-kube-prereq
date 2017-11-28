@@ -1,4 +1,14 @@
 ---
+- name: Add network packages
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - NetworkManager
+    - NetworkManager-glib
+    - nm-connection-editor.x86_64
+
+
 - name: Add Bridge Module
   modprobe:
     name: "{{ item }}"
@@ -18,7 +28,7 @@
     - { name: "net.bridge.bridge-nf-call-ip6tables", value: 1 }
 
 - name: Stop network; Start NetworkManager
-  shell: "systemctl stop network && systemctl start NetworkManager"
+  shell: "systemctl stop network && systemctl start NetworkManager && ifup eth0"
   async: 60
   poll: 10
 
@@ -47,6 +57,12 @@
   async: 60
   poll: 0
 
+- name: dhcp to none
+  lineinfile:
+    path: /etc/sysconfig/network-scripts/ifcfg-eth0
+    regexp: '^BOOTPROTO'
+    line: 'BOOTPROTO=none'
+
 - name: restart server
   shell: sleep 2 && /sbin/shutdown -r now "System reboot"
   async: 1
@@ -68,8 +84,3 @@
     connect_timeout: 15
     timeout: 300
 
-- name: dhcp to none
-  lineinfile:
-    path: /etc/sysconfig/network-scripts/ifcfg-eth0
-    regexp: '^BOOTPROTO'
-    line: 'BOOTPROTO=none'

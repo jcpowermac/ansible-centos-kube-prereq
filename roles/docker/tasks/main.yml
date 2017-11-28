@@ -26,11 +26,10 @@
     name: docker-storage-setup
     state: started
 
-- name: Start / Enable Docker and Kubelet
+- name: Start / Enable Docker
   systemd:
     name: "{{ item }}"
     enabled: yes
     state: started
   with_items:
     - docker
-    - kubelet

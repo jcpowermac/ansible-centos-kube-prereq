@@ -1,21 +1,10 @@
 ---
-- name: Configure Repository
-  yum_repository:
-    name: kubernetes
-    description: kube
-    baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
-    gpgcheck: True
-    gpgkey:
-      - https://packages.cloud.google.com/yum/doc/yum-key.gpg
-      - https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-
 - name: Install Packages
   yum:
     name: "{{ item }}"
     state: installed
   with_items:
     - docker
-    - kubeadm
     - NetworkManager
     - NetworkManager-glib
     - nm-connection-editor.x86_64

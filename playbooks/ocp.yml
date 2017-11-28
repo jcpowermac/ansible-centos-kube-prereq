@@ -1,10 +1,9 @@
 ---
-- name: Configure Prereqs for Kubernetes kubeadm
+- name: Configure Prereqs for OpenShift
   gather_facts: True
   hosts: all
   roles:
     - packages
     - partition
     - docker
-    - kubeadm
     - networking

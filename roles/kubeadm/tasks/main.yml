@@ -1,12 +1,25 @@
 ---
-- name: Disable SELinux
-  command: "setenforce 0"
+- name: Configure Repository
+  yum_repository:
+    name: kubernetes
+    description: kube
+    baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+    gpgcheck: True
+    gpgkey:
+      - https://packages.cloud.google.com/yum/doc/yum-key.gpg
+      - https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 
-- name: Disable SELinux Config
-  lineinfile:
-    path: /etc/selinux/config
-    regexp: '^SELINUX='
-    line: 'SELINUX=disabled'
+- name: Install Packages
+  yum:
+    name: "{{ item }}"
+    state: installed
+  with_items:
+    - kubeadm
+
+- name: Disable SELinux
+  selinux:
+    policy: disabled
+    state: disabled
 
 - name: Copy Kubeadm Config
   copy:
